@@ -249,49 +249,53 @@
       window.addEventListener('DOMContentLoaded', (event) => {
         updateZonaOptions();
       });
-
-
       // Manejo de envio de formulario
       document.getElementById('prediccionForm').addEventListener('submit', function(event) {
-        event.preventDefault();
+      event.preventDefault();
 
-        // Mostrar el mensaje de cargando
-        const loadingMessage = document.getElementById('loadingMessage');
-        loadingMessage.style.display = 'block';
-        
-        // Limpiar el resultado anterior
-        document.getElementById('resultado').innerText = '';
-            
-        // Obtener los datos del formulario
-        const formData = new FormData(this);
-        const data = {};
-        formData.forEach((value, key) => {
-            data[key] = value;
-        });
+      // Mostrar el mensaje de cargando
+      const loadingMessage = document.getElementById('loadingMessage');
+      loadingMessage.style.display = 'block';
+      
+      // Limpiar el resultado anterior
+      document.getElementById('resultado').innerText = '';
+          
+      // Obtener los datos del formulario
+      const formData = new FormData(this);
+      const data = {};
+      formData.forEach((value, key) => {
+          data[key] = value;
+      });
 
-        // Enviar los datos a la API
-        fetch('https://proyectos-uni.onrender.com/predecir_precio', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(result => {
-            // Ocultar el mensaje de "cargando"
-            loadingMessage.style.display = 'none';
+      // Enviar los datos a la API
+      fetch('https://proyectos-uni.onrender.com/predecir_precio', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(result => {
+          // Ocultar el mensaje de "cargando"
+          loadingMessage.style.display = 'none';
 
-            // Redondear el precio estimado a dos decimales
-            const precioRedondeado = Math.round(result.precio_estimado * 100) / 100;
-            
-            // Mostrar el resultado
-            document.getElementById('resultado').innerText = `Precio Estimado: ${precioRedondeado} €`;
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            document.getElementById('resultado').innerText = 'Error al obtener el precio.';
-        });
+          // Verificar que precio_estimado sea un número válido
+          const precioEstimado = result.precio_estimado;
+
+          if (isNaN(precioEstimado) || precioEstimado == null) {
+              document.getElementById('resultado').innerText = 'No se pudo calcular el precio estimado. Intente nuevamente.';
+          } else {
+              // Redondear el precio estimado a dos decimales
+              const precioRedondeado = Math.round(precioEstimado * 100) / 100;
+              // Mostrar el resultado
+              document.getElementById('resultado').innerText = `Precio Estimado: ${precioRedondeado} €`;
+          }
+      })
+      .catch(error => {
+          console.error('Error:', error);
+          document.getElementById('resultado').innerText = 'Error al obtener el precio.';
+      });
     });
     </script>
 </body>
