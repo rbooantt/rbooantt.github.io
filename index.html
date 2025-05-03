@@ -41,14 +41,21 @@
             margin: 10px 0 5px;
             font-weight: bold;
         }
-        select, input[type="number"] {
+        select,
+        input[type="number"] {
             width: calc(100% - 20px);
             padding: 12px;
             margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 6px;
-            display: inline-block;
             font-size: 14px;
+            background-color: #fafafa;
+            transition: border-color 0.2s;
+        }
+        select:focus,
+        input[type="number"]:focus {
+            border-color: #007BFF;
+            outline: none;
         }
         button {
             display: block;
@@ -60,6 +67,8 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
         }
         button:hover {
             background-color: #0056b3;
@@ -68,6 +77,7 @@
             margin-top: 20px;
             font-size: 18px;
             color: #333;
+            font-weight: 600;
         }
         #loadingMessage {
             margin-top: 20px;
