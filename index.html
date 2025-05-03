@@ -5,10 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora del Precio de Viviendas en Madrid Capital</title>
     <style>
-        /* Estilos generales */
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f0f4f8;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
             display: flex;
@@ -16,96 +15,72 @@
             align-items: center;
             min-height: 100vh;
             text-align: center;
+            position: relative;
         }
-
         .container {
             max-width: 900px;
             margin: 20px;
-            padding: 30px;
+            padding: 20px;
             background: #fff;
-            border-radius: 12px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             position: relative;
+            z-index: 1;
             text-align: left;
         }
-
-        /* Encabezado */
-        h1 {
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #2c3e50;
-            font-weight: 500;
-        }
-
-        /* Descripción */
         .description {
-            margin-bottom: 25px;
-            font-size: 16px;
-            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #555;
         }
-
-        /* Etiquetas */
         label {
             display: block;
             margin: 10px 0 5px;
             font-weight: bold;
-            font-size: 16px;
-            color: #34495e;
         }
-
-        /* Campos de selección y entrada */
         select, input[type="number"] {
             width: calc(100% - 20px);
-            padding: 12px;
-            margin-bottom: 15px;
-            border: 1px solid #bdc3c7;
-            border-radius: 6px;
-            font-size: 16px;
-            color: #34495e;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
         }
-
-        /* Botón */
         button {
+            display: block;
             width: 100%;
-            padding: 12px;
-            background-color: #3498db;
+            padding: 10px;
+            background-color: #007BFF;
             color: white;
             border: none;
-            border-radius: 6px;
-            font-size: 18px;
+            border-radius: 4px;
             cursor: pointer;
+            font-size: 16px;
         }
-
         button:hover {
-            background-color: #2980b9;
+            background-color: #0056b3;
         }
-
-        /* Mensaje de carga */
+        #resultado {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
         #loadingMessage {
             margin-top: 20px;
             font-size: 18px;
-            color: #2980b9;
-            display: none;
+            color: blue;
+            display: none; /* Oculto por defecto */
         }
-
-        /* Resultado */
-        #resultado {
-            margin-top: 20px;
-            font-size: 20px;
-            color: #2c3e50;
-            font-weight: 500;
-        }
-
-        /* Pie de página */
         footer {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 10px;
+            margin-bottom: 30px;
             font-size: 14px;
-            color: #7f8c8d;
+            color: #666;
         }
-
+        
         footer a {
-            color: #3498db;
+            color: #007BFF;
             text-decoration: none;
         }
 
@@ -132,6 +107,7 @@
         </div>
 
         <form id="prediccionForm">
+
             <label for="tipo_vivienda">Tipo de Vivienda:</label>
             <select id="tipo_vivienda" name="tipo_vivienda" required>
                 <option value="Piso">Piso</option>
@@ -199,13 +175,13 @@
             </select>
 
             <label for="superficie_construida">Superficie Construida (m²):</label>
-            <input type="number" id="superficie_construida" name="superficie_construida" min="14" max="714" required>
+            <input type="number" id="superficie_construida" name="superficie_construida" min = "14" max = "714" required>
 
             <label for="habitaciones">Número de Habitaciones:</label>
-            <input type="number" id="habitaciones" name="habitaciones" min="1" max="8" required>
+            <input type="number" id="habitaciones" name="habitaciones" min = "1" max = "8" required>
 
             <label for="baños">Número de Baños:</label>
-            <input type="number" id="baños" name="baños" min="1" max="8" required>
+            <input type="number" id="baños" name="baños" min = "1" max = "8" required>
 
             <button type="submit">Predecir Precio</button>
         </form>
@@ -214,6 +190,7 @@
     </div>
 
     <script>
+
       // Estructura que relaciona distritos con sus zonas
       const distritoZonas = {
       'Arganzuela': ['Acacias', 'Chopera', 'Delicias', 'Imperial', 'Legazpi', 'Palos de Moguer', 'Atocha'],
@@ -272,6 +249,7 @@
       window.addEventListener('DOMContentLoaded', (event) => {
         updateZonaOptions();
       });
+
 
       // Manejo de envio de formulario
       document.getElementById('prediccionForm').addEventListener('submit', function(event) {
