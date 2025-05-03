@@ -1,70 +1,66 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calculadora del Precio de Viviendas en Madrid Capital</title>
     <style>
-        footer {
-               margin-top: 10px;
-               margin-bottom: 20px;
-               font-size: 14px;
-               text-align: center;
-               color: #333;
-           }
-        footer a {
-               color: #007BFF;
-               text-decoration: none;
-           }
-        footer a:hover {
-               text-decoration: underline;
-           }
-
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
             margin: 0;
             padding: 0;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
             min-height: 100vh;
         }
-
         .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+            max-width: 960px;
+            margin: 40px 20px;
+            padding: 30px;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
-
         h1 {
             text-align: center;
             color: #333;
         }
-
-        .description {
-            margin-bottom: 20px;
-            font-size: 18px;
-            color: #555;
+        footer {
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #666;
         }
-
+        footer a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .description {
+            margin: 25px 0;
+            font-size: 17px;
+            color: #555;
+            line-height: 1.6;
+        }
         label {
             display: block;
-            margin: 10px 0 5px;
+            margin: 15px 0 6px;
             font-weight: bold;
+            color: #444;
         }
-
         select, input[type="number"] {
             width: 100%;
             padding: 10px;
-            margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 6px;
-            font-size: 15px;
+            box-sizing: border-box;
+            margin-bottom: 10px;
         }
-
         button {
             width: 100%;
             padding: 12px;
@@ -72,46 +68,27 @@
             color: white;
             border: none;
             border-radius: 6px;
-            cursor: pointer;
             font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
-
         button:hover {
             background-color: #0056b3;
         }
-
         #resultado {
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 20px;
+            font-weight: bold;
             color: #222;
             text-align: center;
         }
-
         #loadingMessage {
-            margin-top: 20px;
+            margin-top: 25px;
             font-size: 18px;
-            color: blue;
+            color: #007BFF;
             display: none;
             text-align: center;
-        }
-
-        footer {
-            margin-top: auto;
-            background-color: #222;
-            color: white;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        footer a {
-            color: #61dafb;
-            text-decoration: none;
-            margin: 0 10px;
-            font-weight: bold;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
         }
     </style>
 </head>
@@ -127,9 +104,9 @@
         </footer>
 
         <div class="description">
-            <p>Bienvenido a esta herramienta de predicción de precios de viviendas para la ciudad de Madrid.</p>
-            <p>Complete el siguiente formulario con los detalles de la vivienda para obtener una estimación de su precio.</p>
-            <p><b>*</b> La página puede tardar unos segundos en mostrar el resultado mientras se conecta con el servidor.</p>
+            <p>Bienvenido a esta herramienta de predicción de precios de viviendas en la ciudad de Madrid. 
+               Simplemente complete el formulario con los detalles de la propiedad y obtenga una estimación precisa de su precio.</p>
+            <p><b>*</b> La página puede tardar unos segundos en generar la primera estimación, ya que necesita conectar el frontend con el backend.</p>
         </div>
 
         <form id="prediccionForm">
@@ -208,8 +185,9 @@
 
             <button type="submit">Predecir Precio</button>
         </form>
+
         <div id="loadingMessage">Cargando...</div>
-        <h2 id="resultado"></h2>
+        <div id="resultado"></div>
     </div>
 
     <script>
@@ -249,8 +227,7 @@
 
         function updateZonaOptions() {
             zonaSelect.innerHTML = '';
-            const selectedDistrito = distritoSelect.value;
-            const zonas = distritoZonas[selectedDistrito] || [];
+            const zonas = distritoZonas[distritoSelect.value] || [];
             zonas.sort().forEach(zona => {
                 const option = document.createElement('option');
                 option.value = zona;
@@ -264,32 +241,30 @@
 
         document.getElementById('prediccionForm').addEventListener('submit', function(event) {
             event.preventDefault();
-
             const loadingMessage = document.getElementById('loadingMessage');
+            const resultado = document.getElementById('resultado');
+            resultado.innerText = '';
             loadingMessage.style.display = 'block';
-            document.getElementById('resultado').innerText = '';
 
             const formData = new FormData(this);
             const data = {};
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
+            formData.forEach((value, key) => data[key] = value);
 
             fetch('https://proyectos-uni.onrender.com/predecir_precio', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(data)
             })
             .then(response => response.json())
             .then(result => {
                 loadingMessage.style.display = 'none';
                 const precioRedondeado = Math.round(result.precio_estimado * 100) / 100;
-                document.getElementById('resultado').innerText = `Precio Estimado: ${precioRedondeado} €`;
+                resultado.innerText = `Precio Estimado: ${precioRedondeado} €`;
             })
             .catch(error => {
                 console.error('Error:', error);
+                resultado.innerText = 'Error al obtener el precio.';
                 loadingMessage.style.display = 'none';
-                document.getElementById('resultado').innerText = 'Error al obtener el precio.';
             });
         });
     </script>
