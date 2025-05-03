@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Calculadora del Precio de Viviendas en Madrid Capital</title>
     <style>
+        /* Estilos generales */
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(to right, #c9d6ff, #e2e2e2);
+            font-family: 'Roboto', sans-serif;
+            background-color: #f0f4f8;
             margin: 0;
             padding: 0;
             display: flex;
@@ -20,99 +20,98 @@
 
         .container {
             max-width: 900px;
-            width: 95%;
             margin: 20px;
             padding: 30px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             position: relative;
             text-align: left;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px); /* Prefijo para Safari */
         }
 
+        /* Encabezado */
         h1 {
-            color: #333;
-        }
-
-        .description {
+            font-size: 28px;
             margin-bottom: 20px;
-            font-size: 17px;
-            color: #444;
-            line-height: 1.6;
+            color: #2c3e50;
+            font-weight: 500;
         }
 
+        /* Descripción */
+        .description {
+            margin-bottom: 25px;
+            font-size: 16px;
+            color: #7f8c8d;
+        }
+
+        /* Etiquetas */
         label {
             display: block;
-            margin: 12px 0 6px;
+            margin: 10px 0 5px;
             font-weight: bold;
-            color: #222;
+            font-size: 16px;
+            color: #34495e;
         }
 
+        /* Campos de selección y entrada */
         select, input[type="number"] {
             width: calc(100% - 20px);
             padding: 12px;
-            margin-bottom: 12px;
-            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            border: 1px solid #bdc3c7;
             border-radius: 6px;
-            font-size: 15px;
-            transition: border-color 0.3s;
+            font-size: 16px;
+            color: #34495e;
         }
 
-        select:focus, input[type="number"]:focus {
-            border-color: #007BFF;
-            outline: none;
-        }
-
+        /* Botón */
         button {
-            display: block;
             width: 100%;
             padding: 12px;
-            background: #007BFF;
+            background-color: #3498db;
             color: white;
             border: none;
             border-radius: 6px;
-            font-size: 17px;
+            font-size: 18px;
             cursor: pointer;
-            transition: background 0.3s ease;
         }
 
         button:hover {
-            background: #0056b3;
+            background-color: #2980b9;
         }
 
-        #resultado {
-            margin-top: 20px;
-            font-size: 19px;
-            color: #222;
-            font-weight: bold;
-        }
-
+        /* Mensaje de carga */
         #loadingMessage {
             margin-top: 20px;
             font-size: 18px;
-            color: #0066cc;
+            color: #2980b9;
             display: none;
         }
 
+        /* Resultado */
+        #resultado {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        /* Pie de página */
         footer {
             text-align: center;
-            margin-top: 10px;
-            margin-bottom: 30px;
-            font-size: 18px;
-            color: #666;
+            margin-top: 30px;
+            font-size: 14px;
+            color: #7f8c8d;
         }
 
         footer a {
-            color: #007BFF;
+            color: #3498db;
             text-decoration: none;
         }
 
         footer a:hover {
             text-decoration: underline;
         }
-
     </style>
 </head>
 <body>
@@ -125,7 +124,7 @@
                 <a href="https://github.com/rbooantt/Interesting-Projects" target="_blank" rel="noopener noreferrer">GitHub</a>
             </p>
         </footer>
-        
+
         <div class="description">
             <p>Bienvenido a esta herramienta de predicción de precios de viviendas en la ciudad de Madrid. 
                Simplemente complete el formulario con los detalles de la propiedad y obtenga una estimación precisa de su precio.</p>
@@ -133,7 +132,6 @@
         </div>
 
         <form id="prediccionForm">
-
             <label for="tipo_vivienda">Tipo de Vivienda:</label>
             <select id="tipo_vivienda" name="tipo_vivienda" required>
                 <option value="Piso">Piso</option>
@@ -201,13 +199,13 @@
             </select>
 
             <label for="superficie_construida">Superficie Construida (m²):</label>
-            <input type="number" id="superficie_construida" name="superficie_construida" min = "14" max = "714" required>
+            <input type="number" id="superficie_construida" name="superficie_construida" min="14" max="714" required>
 
             <label for="habitaciones">Número de Habitaciones:</label>
-            <input type="number" id="habitaciones" name="habitaciones" min = "1" max = "8" required>
+            <input type="number" id="habitaciones" name="habitaciones" min="1" max="8" required>
 
             <label for="baños">Número de Baños:</label>
-            <input type="number" id="baños" name="baños" min = "1" max = "8" required>
+            <input type="number" id="baños" name="baños" min="1" max="8" required>
 
             <button type="submit">Predecir Precio</button>
         </form>
@@ -216,65 +214,107 @@
     </div>
 
     <script>
-        // Estructura que relaciona distritos con sus zonas
-        const distritoZonas = {
-          'Arganzuela': ['Acacias', 'Chopera', 'Delicias', 'Imperial', 'Legazpi', 'Palos de Moguer', 'Atocha'],
-          'Barajas': ['Aeropuerto', 'Alameda de Osuna', 'Casco Historico de Barajas', 'Corralejos', 'Timon'],
-          'Carabanchel': ['Abrantes', 'Comillas', 'Opanel', 'San Isidro', 'Vista Alegre', 'Puerta Bonita', 'Buenavista', 'Pau de Carabanchel'],
-          'Centro': ['Embajadores-Lavapies', 'Justicia-Chueca', 'Palacio', 'Sol', 'Universidad-Malasana', 'Cortes-Huertas'],
-          'Chamartin': ['Castilla', 'Ciudad Jardin', 'El Viso', 'Hispanoamerica', 'Nueva Espana', 'Prosperidad'],
-          'Chamberi': ['Almagro', 'Arapiles', 'Gaztambide', 'Rios Rosas', 'Trafalgar', 'Vallehermoso'],
-          'Ciudad Lineal': ['Colina', 'Concepción', 'Costillares', 'Pueblo Nuevo', 'Quintana', 'San Juan Bautista', 'San Pascual', 'Ventas'],
-          'Fuencarral-El Pardo': ['El Pardo', 'Fuentelarreina', 'La Paz', 'Pueblo del Arroyo', 'La Vaguada', 'Valverde'],
-          'Hortaleza': ['Aeroespacial', 'Canillas', 'Diana', 'Norte', 'Pinar del Rey', 'San Cristobal', 'Sanchinarro'],
-          'Latina': ['Aluche', 'Cuatro Vientos', 'Lucero', 'Los Cármenes', 'Puerta del Ángel'],
-          'Moncloa-Aravaca': ['Aravaca', 'Ciudad Universitaria', 'El Plantío', 'Valdemarin'],
-          'Moratalaz': ['Aquiles', 'Casco Histórico', 'Cerro del Agua', 'Marroquina'],
-          'Puente de Vallecas': ['San Diego', 'El Pozo', 'Palomeras Bajas', 'Palomeras Sureste'],
-          'Retiro': ['Ibiza', 'Estrella', 'Adelfas'],
-          'Salamanca': ['Fuente del Berro', 'Guindalera', 'Recoletos', 'Lista'],
-          'San Blas-Canillejas': ['Canillejas', 'Simancas', 'Arcos', 'Alameda', 'Hellín'],
-          'Tetuán': ['Berruguete', 'Castilla', 'El Toril'],
-          'Usera': ['Los Pajaritos', 'Oporto', 'Santa Eugenia', 'Vecindario'],
-          'Vicálvaro': ['Cerro de la Plata', 'Las Suertes', 'La Vía'],
-          'Villa de Vallecas': ['Casco Histórico', 'El Rollo', 'Puente de Vallecas'],
-        };
+      // Estructura que relaciona distritos con sus zonas
+      const distritoZonas = {
+      'Arganzuela': ['Acacias', 'Chopera', 'Delicias', 'Imperial', 'Legazpi', 'Palos de Moguer', 'Atocha'],
+      'Barajas': ['Aeropuerto', 'Alameda de Osuna', 'Casco Historico de Barajas', 'Corralejos', 'Timon'],
+      'Carabanchel': ['Abrantes', 'Comillas', 'Opanel', 'San Isidro', 'Vista Alegre', 'Puerta Bonita', 'Buenavista', 'Pau de Carabanchel'],
+      'Centro': ['Embajadores-Lavapies', 'Justicia-Chueca', 'Palacio', 'Sol', 'Universidad-Malasana', 'Cortes-Huertas'],
+      'Chamartin': ['Castilla', 'Ciudad Jardin', 'El Viso', 'Hispanoamerica', 'Nueva Espana', 'Prosperidad'],
+      'Chamberi': ['Almagro', 'Arapiles', 'Gaztambide', 'Rios Rosas', 'Trafalgar', 'Vallehermoso'],
+      'Ciudad Lineal': ['Colina', 'Concepción', 'Costillares', 'Pueblo Nuevo', 'Quintana', 'San Juan Bautista', 'San Pascual', 'Ventas'],
+      'Fuencarral-El Pardo': ['El Pardo', 'Fuentelarreina', 'La Paz', 'Las Tablas', 'Mirasierra-Arroyo del Fresno', 'Montecarmelo', 'Penagrande', 'Valverde', 'Pilar'],
+      'Hortaleza': ['Canillas', 'Pinar del Rey', 'Palomas', 'Valdebebas-Valdefuentes', 'Piovera', 'Apostol Santiago', 'Sanchinarro', 'Virgen del Cortijo-Manoteras'],
+      'Latina': ['Aluche', 'Campamento', 'Cuatro Vientos', 'Las Aguilas', 'Lucero', 'Carmenes', 'Puerta del Angel'],
+      'Moncloa-Aravaca': ['Arguelles', 'Casa de Campo', 'Ciudad Universitaria', 'Valdezarza', 'Valdemarin', 'Aravaca', 'El Plantio'],
+      'Moratalaz': ['Media Legua', 'Marroquina', 'Pavones', 'Vinateros', 'Fontarron'],
+      'Puente de Vallecas': ['Entrevias', 'Numancia', 'Palomeras Bajas', 'Palomeras Sureste', 'Portazgo', 'San Diego'],
+      'Retiro': ['Adelfas', 'Estrella', 'Ibiza', 'Jeronimos', 'Nino Jesus', 'Pacifico'],
+      'Salamanca': ['Castellana', 'Fuente del Berro', 'Goya', 'Guindalera', 'Lista', 'Recoletos'],
+      'San Blas': ['Amposta', 'Arcos', 'Canillejas', 'Hellin', 'Rosas', 'Rejas', 'Salvador', 'Simancas'],
+      'Tetuan': ['Almenara', 'Bellas Vistas', 'Berruguete', 'Castillejos', 'Cuatro Caminos', 'Valdeacederas'],
+      'Usera': ['Almendrales', 'Moscardo', 'Orcasitas', 'Orcasur', 'Pradolongo', 'San Fermin', 'Zofio'],
+      'Vicalvaro': ['Ambroz', 'Centro Historico', 'El Canaveral', 'Valdebernardo', 'Valderribas'],
+      'Villa de Vallecas': ['Casco Historico de Vallecas', 'Santa Eugenia', 'Ensanche de Vallecas-Valdecarros'],
+      'Villaverde': ['Butarque', 'Los Angeles', 'Los Rosales', 'San Andres', 'San Cristobal']
+      };
 
-        // Obtiene el distrito seleccionado y carga sus zonas
-        document.getElementById("distrito").addEventListener('change', function () {
-          const distrito = this.value;
-          const zonas = distritoZonas[distrito] || [];
-          const zonaSelect = document.getElementById("zona");
+      // Poblar el selector de distritos
+      const distritoSelect = document.getElementById('distrito');
+      Object.keys(distritoZonas).sort().forEach(distrito => {
+        const option = document.createElement('option');
+        option.value = distrito;
+        option.textContent = distrito;
+        distritoSelect.appendChild(option);
+      });
 
-          zonaSelect.innerHTML = "";
-          zonas.forEach(zona => {
-            const option = document.createElement("option");
-            option.value = zona;
-            option.textContent = zona;
-            zonaSelect.appendChild(option);
-          });
+      // Poblar el selector de zonas basado en el distrito seleccionado
+      const zonaSelect = document.getElementById('zona');
+      function updateZonaOptions() {
+        // Limpiar opciones anteriores
+        zonaSelect.innerHTML = '';
+
+        const selectedDistrito = distritoSelect.value;
+        const zonas = distritoZonas[selectedDistrito] || [];
+
+        zonas.sort().forEach(zona => {
+          const option = document.createElement('option');
+          option.value = zona;
+          option.textContent = zona;
+          zonaSelect.appendChild(option);
+        });
+      }
+
+      // Actualizar zonas cuando cambia el distrito
+      distritoSelect.addEventListener('change', updateZonaOptions);
+
+      // Inicializar zonas al cargar la página
+      window.addEventListener('DOMContentLoaded', (event) => {
+        updateZonaOptions();
+      });
+
+      // Manejo de envio de formulario
+      document.getElementById('prediccionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Mostrar el mensaje de cargando
+        const loadingMessage = document.getElementById('loadingMessage');
+        loadingMessage.style.display = 'block';
+        
+        // Limpiar el resultado anterior
+        document.getElementById('resultado').innerText = '';
+            
+        // Obtener los datos del formulario
+        const formData = new FormData(this);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
         });
 
-        // Realiza la predicción
-        document.getElementById("prediccionForm").addEventListener('submit', function (event) {
-            event.preventDefault();
-            const formData = new FormData(this);
-            document.getElementById("loadingMessage").style.display = "block";
+        // Enviar los datos a la API
+        fetch('https://proyectos-uni.onrender.com/predecir_precio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            // Ocultar el mensaje de "cargando"
+            loadingMessage.style.display = 'none';
 
-            fetch('/predict', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById("loadingMessage").style.display = "none";
-                document.getElementById("resultado").textContent = `El precio estimado es: ${data.precio}`;
-            })
-            .catch(error => {
-                document.getElementById("loadingMessage").style.display = "none";
-                alert("Error al realizar la predicción. Intenta nuevamente.");
-            });
+            // Redondear el precio estimado a dos decimales
+            const precioRedondeado = Math.round(result.precio_estimado * 100) / 100;
+            
+            // Mostrar el resultado
+            document.getElementById('resultado').innerText = `Precio Estimado: ${precioRedondeado} €`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('resultado').innerText = 'Error al obtener el precio.';
         });
+    });
     </script>
 </body>
 </html>
