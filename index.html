@@ -310,7 +310,7 @@
             const precioRedondeado = Math.round(result.precio_estimado * 100) / 100;
             
             // Mostrar el resultado
-            document.getElementById('resultado').innerText = `Precio Estimado: ${result.precio_estimado} €`;
+            document.getElementById('resultado').innerText = `Precio Estimado: ${result.precioRedondeado} €`;
         })
         .catch(error => {
             console.error('Error:', error);
