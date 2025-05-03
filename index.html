@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora del Precio de Viviendas en Madrid Capital</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            position: relative;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+            text-align: left;
+        }
+        .description {
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #555;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+        select, input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #resultado {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        #loadingMessage {
+            margin-top: 20px;
+            font-size: 18px;
+            color: blue;
+            display: none; /* Oculto por defecto */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Calculadora de Precios de Viviendas en Madrid Capital</h1>
+        <div class="description">
+            <p>Bienvenido a esta herramienta de predicción de precios de viviendas que aplica a las casas de la ciudad de Madrid. 
+               Simplemente complete el formulario que se muestra debajo con los detalles de la vivienda y obtenga una estimación precisa de su precio. </p>
+            <p>(<b>* </b>La página puede tardar un par de minutos en obtener la primera estimación del precio, pues tiene que conectar 
+                el frontend (pagina web) con el backend (programa)). </p>
+        </div>
+
+        <form id="prediccionForm">
+
+            <label for="tipo_vivienda">Tipo de Vivienda:</label>
+            <select id="tipo_vivienda" name="tipo_vivienda" required>
+                <option value="Piso">Piso</option>
+                <option value="Duplex">Duplex</option>
+                <option value="Chalet">Chalet</option>
+                <option value="Casa">Casa</option>
+                <option value="Atico">Atico</option>
+                <option value="Apartamento">Apartamento</option>
+            </select>
+
+            <label for="distrito">Distrito:</label>
+            <select id="distrito" name="distrito" required>
+            </select>
+
+            <label for="zona">Zona:</label>
+            <select id="zona" name="zona" required>
+            </select>
+
+            <label for="piscina">Piscina:</label>
+            <select id="piscina" name="piscina" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+
+            <label for="terraza">Terraza:</label>
+            <select id="terraza" name="terraza" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+
+            <label for="jardin">Jardín:</label>
+            <select id="jardin" name="jardin" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+            
+            <label for="garaje">Garaje:</label>
+            <select id="garaje" name="garaje" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+
+            <label for="trastero">Trastero:</label>
+            <select id="trastero" name="trastero" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+
+            <label for="calefaccion">Calefacción:</label>
+            <select id="calefaccion" name="calefaccion" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+
+            <label for="aire_acondicionado">Aire Acondicionado:</label>
+            <select id="aire_acondicionado" name="aire_acondicionado" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+
+            <label for="ascensor">Ascensor:</label>
+            <select id="ascensor" name="ascensor" required>
+                <option value="0">No</option>
+                <option value="1">Sí</option>
+            </select>
+
+            <label for="superficie_construida">Superficie Construida (m²):</label>
+            <input type="number" id="superficie_construida" name="superficie_construida" min = "14" max = "714" required>
+
+            <label for="habitaciones">Número de Habitaciones:</label>
+            <input type="number" id="habitaciones" name="habitaciones" min = "1" max = "8" required>
+
+            <label for="baños">Número de Baños:</label>
+            <input type="number" id="baños" name="baños" min = "1" max = "8" required>
+
+            <button type="submit">Predecir Precio</button>
+        </form>
+        <div id="loadingMessage">Cargando...</div>
+        <h2 id="resultado"></h2>
+    </div>
+
+    <script>
+
+      // Estructura que relaciona distritos con sus zonas
+      const distritoZonas = {
+      'Arganzuela': ['Acacias', 'Chopera', 'Delicias', 'Imperial', 'Legazpi', 'Palos de Moguer', 'Atocha'],
+      'Barajas': ['Aeropuerto', 'Alameda de Osuna', 'Casco Historico de Barajas', 'Corralejos', 'Timon'],
+      'Carabanchel': ['Abrantes', 'Comillas', 'Opanel', 'San Isidro', 'Vista Alegre', 'Puerta Bonita', 'Buenavista', 'Pau de Carabanchel'],
+      'Centro': ['Embajadores-Lavapies', 'Justicia-Chueca', 'Palacio', 'Sol', 'Universidad-Malasana', 'Cortes-Huertas'],
+      'Chamartin': ['Castilla', 'Ciudad Jardin', 'El Viso', 'Hispanoamerica', 'Nueva Espana', 'Prosperidad'],
+      'Chamberi': ['Almagro', 'Arapiles', 'Gaztambide', 'Rios Rosas', 'Trafalgar', 'Vallehermoso'],
+      'Ciudad Lineal': ['Colina', 'Concepción', 'Costillares', 'Pueblo Nuevo', 'Quintana', 'San Juan Bautista', 'San Pascual', 'Ventas'],
+      'Fuencarral-El Pardo': ['El Pardo', 'Fuentelarreina', 'La Paz', 'Las Tablas', 'Mirasierra-Arroyo del Fresno', 'Montecarmelo', 'Penagrande', 'Valverde', 'Pilar'],
+      'Hortaleza': ['Canillas', 'Pinar del Rey', 'Palomas', 'Valdebebas-Valdefuentes', 'Piovera', 'Apostol Santiago', 'Sanchinarro', 'Virgen del Cortijo-Manoteras'],
+      'Latina': ['Aluche', 'Campamento', 'Cuatro Vientos', 'Las Aguilas', 'Lucero', 'Carmenes', 'Puerta del Angel'],
+      'Moncloa-Aravaca': ['Arguelles', 'Casa de Campo', 'Ciudad Universitaria', 'Valdezarza', 'Valdemarin', 'Aravaca', 'El Plantio'],
+      'Moratalaz': ['Media Legua', 'Marroquina', 'Pavones', 'Vinateros', 'Fontarron'],
+      'Puente de Vallecas': ['Entrevias', 'Numancia', 'Palomeras Bajas', 'Palomeras Sureste', 'Portazgo', 'San Diego'],
+      'Retiro': ['Adelfas', 'Estrella', 'Ibiza', 'Jeronimos', 'Nino Jesus', 'Pacifico'],
+      'Salamanca': ['Castellana', 'Fuente del Berro', 'Goya', 'Guindalera', 'Lista', 'Recoletos'],
+      'San Blas': ['Amposta', 'Arcos', 'Canillejas', 'Hellin', 'Rosas', 'Rejas', 'Salvador', 'Simancas'],
+      'Tetuan': ['Almenara', 'Bellas Vistas', 'Berruguete', 'Castillejos', 'Cuatro Caminos', 'Valdeacederas'],
+      'Usera': ['Almendrales', 'Moscardo', 'Orcasitas', 'Orcasur', 'Pradolongo', 'San Fermin', 'Zofio'],
+      'Vicalvaro': ['Ambroz', 'Centro Historico', 'El Canaveral', 'Valdebernardo', 'Valderribas'],
+      'Villa de Vallecas': ['Casco Historico de Vallecas', 'Santa Eugenia', 'Ensanche de Vallecas-Valdecarros'],
+      'Villaverde': ['Butarque', 'Los Angeles', 'Los Rosales', 'San Andres', 'San Cristobal']
+      };
+
+      // Poblar el selector de distritos
+      const distritoSelect = document.getElementById('distrito');
+      Object.keys(distritoZonas).sort().forEach(distrito => {
+        const option = document.createElement('option');
+        option.value = distrito;
+        option.textContent = distrito;
+        distritoSelect.appendChild(option);
+      });
+
+      // Poblar el selector de zonas basado en el distrito seleccionado
+      const zonaSelect = document.getElementById('zona');
+      function updateZonaOptions() {
+        // Limpiar opciones anteriores
+        zonaSelect.innerHTML = '';
+
+        const selectedDistrito = distritoSelect.value;
+        const zonas = distritoZonas[selectedDistrito] || [];
+
+        zonas.sort().forEach(zona => {
+          const option = document.createElement('option');
+          option.value = zona;
+          option.textContent = zona;
+          zonaSelect.appendChild(option);
+        });
+      }
+
+      // Actualizar zonas cuando cambia el distrito
+      distritoSelect.addEventListener('change', updateZonaOptions);
+
+      // Inicializar zonas al cargar la página
+      window.addEventListener('DOMContentLoaded', (event) => {
+        updateZonaOptions();
+      });
+
+
+      // Manejo de envio de formulario
+      document.getElementById('prediccionForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        // Mostrar el mensaje de cargando
+        const loadingMessage = document.getElementById('loadingMessage');
+        loadingMessage.style.display = 'block';
+        
+        // Limpiar el resultado anterior
+        document.getElementById('resultado').innerText = '';
+            
+        // Obtener los datos del formulario
+        const formData = new FormData(this);
+        const data = {};
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+
+        // Enviar los datos a la API
+        fetch('https://proyectos-uni.onrender.com/predecir_precio', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(result => {
+            // Ocultar el mensaje de "cargando"
+            loadingMessage.style.display = 'none';
+
+            // Redondear el precio estimado a dos decimales
+            const precioRedondeado = Math.round(result.precio_estimado * 100) / 100;
+            
+            // Mostrar el resultado
+            document.getElementById('resultado').innerText = `Precio Estimado: ${result.precio_estimado} €`;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('resultado').innerText = 'Error al obtener el precio.';
+        });
+    });
+    </script>
+</body>
+</html>
