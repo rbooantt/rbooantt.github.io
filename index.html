@@ -272,7 +272,7 @@
                 if (response.ok) {
                     const result = await response.json();
                     document.getElementById('loadingMessage').style.display = 'none';
-                    document.getElementById('resultado').textContent = `El precio estimado de la vivienda es: ${result.precio} €`;
+                    document.getElementById('resultado').textContent = `El precio estimado de la vivienda es: ${result.precio_estimado} €`;
                 } else {
                     throw new Error('Error al obtener la predicción');
                 }
