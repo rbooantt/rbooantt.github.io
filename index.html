@@ -306,6 +306,12 @@
             // Ocultar el mensaje de "cargando"
             loadingMessage.style.display = 'none';
 
+            console.log(result); 
+            if (!result.precio_estimado) {
+                    document.getElementById('resultado').innerText = 'No se recibió un precio estimado válido.';
+                    return;
+            }
+
             // Redondear el precio estimado a dos decimales
             const precioRedondeado = Math.round(result.precio_estimado * 100) / 100;
             
