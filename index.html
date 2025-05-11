@@ -8,100 +8,105 @@
 </head>
 <body>
     <div class="container">
-        <h1>Calculadora de Precios de Viviendas en Madrid Capital</h1>
 
-        <footer>
-            <p>Desarrollado por Andrés Rubio Lafuente — 
-                <a href="https://www.linkedin.com/in/andrés-rubio-lafuente-2b2248265/" target="_blank" rel="noopener noreferrer">LinkedIn</a> | 
-                <a href="https://github.com/rbooantt/Interesting-Projects" target="_blank" rel="noopener noreferrer">GitHub</a>
-            </p>
-        </footer>
+        <section class="titulo-autor"> 
+            <h1>Calculadora de Precios de Viviendas en Madrid Capital</h1>
 
-        <div class="description">
+            <footer>
+                <p>Desarrollado por Andrés Rubio Lafuente — 
+                    <a href="https://www.linkedin.com/in/andrés-rubio-lafuente-2b2248265/" target="_blank" rel="noopener noreferrer">LinkedIn</a> | 
+                    <a href="https://github.com/rbooantt/Interesting-Projects" target="_blank" rel="noopener noreferrer">GitHub</a>
+                </p>
+            </footer>
+        </section>
+
+        <section class="descripcion">
             <p>Bienvenido a esta herramienta de predicción de precios de viviendas en la ciudad de Madrid. 
                Complete el formulario con los detalles de la propiedad para obtener una estimación precisa del precio.</p>
-            <p><b>*</b> La página puede tardar unos segundos en generar la primera estimación, ya que necesita conectar el frontend con el backend.</p>
-        </div>
+            <p><b>Nota: </b> La página puede tardar unos minutos en generar la primera estimación, ya que necesita conectar el frontend con el backend.</p>
+        </section>
 
-        <form id="prediccionForm">
-
-            <label for="tipo_vivienda">Tipo de Vivienda:</label>
-            <select id="tipo_vivienda" name="tipo_vivienda" required>
-                <option value="Piso">Piso</option>
-                <option value="Duplex">Duplex</option>
-                <option value="Chalet">Chalet</option>
-                <option value="Casa">Casa</option>
-                <option value="Atico">Ático</option>
-                <option value="Apartamento">Apartamento</option>
-            </select>
-
-            <label for="distrito">Distrito:</label>
-            <select id="distrito" name="distrito" required></select>
-
-            <label for="zona">Zona:</label>
-            <select id="zona" name="zona" required></select>
-
-            <label for="piscina">Piscina:</label>
-            <select id="piscina" name="piscina" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="terraza">Terraza:</label>
-            <select id="terraza" name="terraza" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="jardin">Jardín:</label>
-            <select id="jardin" name="jardin" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="garaje">Garaje:</label>
-            <select id="garaje" name="garaje" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="trastero">Trastero:</label>
-            <select id="trastero" name="trastero" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="calefaccion">Calefacción:</label>
-            <select id="calefaccion" name="calefaccion" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="aire_acondicionado">Aire Acondicionado:</label>
-            <select id="aire_acondicionado" name="aire_acondicionado" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="ascensor">Ascensor:</label>
-            <select id="ascensor" name="ascensor" required>
-                <option value="0">No</option>
-                <option value="1">Sí</option>
-            </select>
-
-            <label for="superficie_construida">Superficie Construida (m²):</label>
-            <input type="number" id="superficie_construida" name="superficie_construida" min="14" max="714" required>
-
-            <label for="habitaciones">Número de Habitaciones:</label>
-            <input type="number" id="habitaciones" name="habitaciones" min="1" max="8" required>
-
-            <label for="baños">Número de Baños:</label>
-            <input type="number" id="baños" name="baños" min="1" max="8" required>
-
-            <button type="submit">Predecir Precio</button>
-        </form>
-        <div id="loadingMessage">Cargando...</div>
-        <h2 id="resultado"></h2>
+        <section class="formulario">
+           <form id="prediccionForm">
+   
+               <label for="tipo_vivienda">Tipo de Vivienda:</label>
+               <select id="tipo_vivienda" name="tipo_vivienda" required>
+                   <option value="Piso">Piso</option>
+                   <option value="Duplex">Duplex</option>
+                   <option value="Chalet">Chalet</option>
+                   <option value="Casa">Casa</option>
+                   <option value="Atico">Ático</option>
+                   <option value="Apartamento">Apartamento</option>
+               </select>
+   
+               <label for="distrito">Distrito:</label>
+               <select id="distrito" name="distrito" required></select>
+   
+               <label for="zona">Zona:</label>
+               <select id="zona" name="zona" required></select>
+   
+               <label for="piscina">Piscina:</label>
+               <select id="piscina" name="piscina" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="terraza">Terraza:</label>
+               <select id="terraza" name="terraza" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="jardin">Jardín:</label>
+               <select id="jardin" name="jardin" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="garaje">Garaje:</label>
+               <select id="garaje" name="garaje" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="trastero">Trastero:</label>
+               <select id="trastero" name="trastero" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="calefaccion">Calefacción:</label>
+               <select id="calefaccion" name="calefaccion" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="aire_acondicionado">Aire Acondicionado:</label>
+               <select id="aire_acondicionado" name="aire_acondicionado" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="ascensor">Ascensor:</label>
+               <select id="ascensor" name="ascensor" required>
+                   <option value="0">No</option>
+                   <option value="1">Sí</option>
+               </select>
+   
+               <label for="superficie_construida">Superficie Construida (m²):</label>
+               <input type="number" id="superficie_construida" name="superficie_construida" min="14" max="714" required>
+   
+               <label for="habitaciones">Número de Habitaciones:</label>
+               <input type="number" id="habitaciones" name="habitaciones" min="1" max="8" required>
+   
+               <label for="baños">Número de Baños:</label>
+               <input type="number" id="baños" name="baños" min="1" max="8" required>
+   
+               <button type="submit">Predecir Precio</button>
+           </form>
+           <div id="loadingMessage">Cargando...</div>
+           <h2 id="resultado"></h2>
+        </section>
     </div>
 
     <script>
