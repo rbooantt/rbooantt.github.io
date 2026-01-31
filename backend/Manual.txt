@@ -1,0 +1,10 @@
+# Frontend
+cd C:\Users\rbooa\OneDrive\Documentos\GitHub\rbooantt.github.io\frontend
+npm install
+npm run dev
+
+# Backend
+cd C:\Users\rbooa\nlp_venv\Scripts
+activate
+cd C:\Users\rbooa\OneDrive\Documentos\GitHub\rbooantt.github.io\backend
+uvicorn app:app --reload
