@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 import pickle
 import numpy as np
+import pandas as pd
 from typing import Optional
 
 # Cargar el modelo de ML entrenado
@@ -21,7 +22,12 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "https://rbooantt.github.io",
+        "https://rbooantt-github-io.onrender.com",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -68,22 +74,23 @@ async def health_check():
 @app.post("/predecir_precio", response_model=PrecioResponse)
 async def predecir_precio(vivienda: ViviendaInput):
     try:
-        entrada = np.array([[
-            vivienda.tipo_vivienda,
-            vivienda.distrito,
-            vivienda.zona,
-            vivienda.piscina,
-            vivienda.terraza,
-            vivienda.jardin,
-            vivienda.garaje,
-            vivienda.trastero,
-            vivienda.calefaccion,
-            vivienda.aire_acondicionado,
-            vivienda.ascensor,
-            vivienda.superficie_construida,
-            vivienda.habitaciones,
-            vivienda.baños,
-        ]], dtype=object)
+        # Convertir a DataFrame para que ColumnTransformer funcione
+        entrada = pd.DataFrame([{
+            "tipo_vivienda": vivienda.tipo_vivienda,
+            "distrito": vivienda.distrito,
+            "zona": vivienda.zona,
+            "piscina": vivienda.piscina,
+            "terraza": vivienda.terraza,
+            "jardin": vivienda.jardin,
+            "garaje": vivienda.garaje,
+            "trastero": vivienda.trastero,
+            "calefaccion": vivienda.calefaccion,
+            "aire_acondicionado": vivienda.aire_acondicionado,
+            "ascensor": vivienda.ascensor,
+            "superficie_construida": vivienda.superficie_construida,
+            "habitaciones": vivienda.habitaciones,
+            "baños": vivienda.baños,
+        }])
 
         entrada_preprocesada = preproceso.transform(entrada)
         precio = modelo.predict(entrada_preprocesada)[0]
